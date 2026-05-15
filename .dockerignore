@@ -1,0 +1,5 @@
+env/
+myprojectenv/
+__pycache__/
+*.pyc
+.git/
