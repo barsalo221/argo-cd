@@ -1,7 +1,0 @@
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: db-storage
-provisioner: k8s.io/minikube-hostpath # התוכנה של מיניקיו שמייצרת את האחסון בפועל
-reclaimPolicy: Retain # אם במידה ימחק הכל אז K8S לא ימחוק את המידע של ה - DB
-volumeBindingMode: Immediate # יצור מיד את האחסון שביקשנו

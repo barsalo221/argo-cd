@@ -1,0 +1,25 @@
+app:
+  replicaCount: 2
+  image:
+    repository: barsalo221/car-app
+    tag: latest
+    pullPolicy: Always
+    containerPort: 5000
+
+mongodb:
+  image: mongo:latest
+  port: 27017
+  storage:
+    size: 1Gi
+    storageClass: db-storage
+    path: /data/db
+    bindingMode: WaitForFirstConsumer
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 5000
+  nodePort: 30001
+
+secrets:
+  mongoUri: "mongodb://mongo-svc:27017/car_db"
