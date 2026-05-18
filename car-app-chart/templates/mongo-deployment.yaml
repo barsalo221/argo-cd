@@ -18,7 +18,7 @@ metadata:
   name: {{ include "car-app.fullname" . }}-mongo-deploy
   labels: {{- include "car-app.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.mongodb.replicaCount }}
   selector:
     matchLabels: 
     {{- include "car-app.selectorLabels" . | nindent 6 }}

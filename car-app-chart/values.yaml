@@ -10,6 +10,7 @@ mongodb:
   image: mongo:latest
   port: 27017
   type: LoadBalancer
+  replicaCount: 1
   storage:
     size: 1Gi
     storageClass: db-storage
