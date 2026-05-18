@@ -6,13 +6,13 @@ metadata:
         kubernetes.io/ingress.class: traefik
 spec:
     rules:
-        - host: car-app.local
-        http:
-            paths:
-                - path: /
-                pathType: Prefix
-                backend:
-                    service:
-                        name: {{ include "car-app.fullname" . }}-svc
-                        port:
-                            number: 5000
+    - host: car-app.local
+    http:
+        paths:
+            - path: /
+            pathType: Prefix
+            backend:
+                service:
+                    name: {{ include "car-app.fullname" . }}-svc
+                    port:
+                        number: 5000
