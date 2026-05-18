@@ -15,5 +15,5 @@ spec:
     http:
       paths:
       - backend:
-       servicename: {{ include "car-app.fullname" . }}-svc
-       servicePort: 80
+        servicename: {{ include "car-app.fullname" . }}-svc
+        servicePort: 80
