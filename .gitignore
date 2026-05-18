@@ -1,24 +1,16 @@
-# Python - סביבות וירטואליות (זה מה ששבר את ארגו)
 myprojectenv/
 venv/
 ENV/
 env/
 .env
-
-# Python - קבצי מערכת ו-Cache
 __pycache__/
 *.py[cod]
 *$py.class
 .pytest_cache/
 
-# Helm - קבצי לוקאל (אם יש)
 charts/*.tgz
 charts/*.tar.gz
-
-# מערכת הפעלה
 .DS_Store
 Thumbs.db
-
-# IDE - הגדרות אישיות של VS Code
 .vscode/
 .idea/

@@ -9,6 +9,7 @@ app:
 mongodb:
   image: mongo:latest
   port: 27017
+  type: LoadBalancer
   storage:
     size: 1Gi
     storageClass: db-storage
