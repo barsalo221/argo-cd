@@ -8,6 +8,7 @@ app:
 
 mongodb:
   image: mongo:latest
+  initImage: busybox:latest
   port: 27017
   type: LoadBalancer
   replicaCount: 1

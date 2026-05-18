@@ -27,14 +27,18 @@ spec:
       labels: 
       {{- include "car-app.selectorLabels" . | nindent 8 }}
     spec:
+      initContainers:
+        - name: fix-permissions
+          image: {{ .Values.mongodb.initImage }}
+          command: ["sh", "-c", "chown -R 999:999 /data/db"]
+          volumeMounts:
+            - name: mongo-storage
+              mountPath: {{ .Values.mongodb.storage.path }}
       containers:
         - name: mongodb
           image: {{ .Values.mongodb.image }}
           ports:
             - containerPort: {{ .Values.mongodb.port }}
-          volumeMounts:
-            - name: mongo-storage
-              mountPath: {{ .Values.mongodb.storage.path }}
       volumes:
         - name: mongo-storage
           persistentVolumeClaim:
