@@ -12,7 +12,15 @@ spec:
       storage: {{ .Values.mongodb.storage.size }}
 ---
 # MONGO Deployment
-apiVersion: apps/v1kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
   template:
     metadata:
       labels:
