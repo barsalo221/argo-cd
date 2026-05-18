@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-  - host: car-app.local
+  - host: car-app.com
     http:
       paths:
       - path: /

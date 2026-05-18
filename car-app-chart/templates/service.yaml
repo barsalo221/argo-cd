@@ -4,7 +4,6 @@ metadata:
   name: {{ include "car-app.fullname" . }}-svc
   labels: {{- include "car-app.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
   selector:
     {{- include "car-app.selectorLabels" . | nindent 4 }}
   ports:
