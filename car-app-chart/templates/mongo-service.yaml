@@ -4,7 +4,6 @@ metadata:
   name: mongo-svc
 spec:
   selector:
-    type: {{ .Values.mongodb.type }}
     app: mongodb
   ports:
     - protocol: TCP
