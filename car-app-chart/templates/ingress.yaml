@@ -6,7 +6,7 @@ metadata:
         kubernetes.io/ingress.class: traefik
 spec:
     rules:
-    - host: car-app.local
+        - host: car-app.local
     http:
         paths:
             - path: /
