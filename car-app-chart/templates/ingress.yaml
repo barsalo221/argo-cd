@@ -20,4 +20,4 @@ spec:
           service:
             name: {{ include "car-app.fullname" . }}-svc
             port:
-              number: 5000
+              number: 80
