@@ -14,10 +14,6 @@ spec:
   - host: car-app.local
     http:
       paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ include "car-app.fullname" . }}-svc
-            port:
-              number: 80
+       - backend:
+        servicename: {{ include "car-app.fullname" . }}-svc
+        servicePort: 80
