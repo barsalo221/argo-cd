@@ -6,6 +6,8 @@ metadata:
   namespace: default
   annotations:
     kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+    traefik.ingress.kubernetes.io/service.sticky.cookie.name: "sticky-cookie"
 spec:
   ingressClassName: traefik
   rules:
