@@ -14,17 +14,18 @@ spec:
 # MONGO Deployment
 apiVersion: apps/v1
 kind: Deployment
-metadata:
-  name: mongo-deployment
+metadata:   
+  name: {{ include "car-app.fullname" . }}-mongo-deploy
+  labels: {{- include "car-app.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      app: mongodb
+    matchLabels: 
+    {{- include "car-app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      labels:
-        app: mongodb
+      labels: 
+      {{- include "car-app.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: mongodb

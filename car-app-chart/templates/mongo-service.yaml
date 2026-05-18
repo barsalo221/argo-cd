@@ -1,10 +1,11 @@
 apiVersion: v1
 kind: Service
-metadata:
-  name: mongo-svc
+metadata: 
+  name: {{ include "car-app.fullname" . }}-mongo-svc
+  labels: {{- include "car-app.labels" . | nindent 4 }}
 spec:
-  selector:
-    app: mongodb
+  selector: 
+    {{- include "car-app.selectorLabels" . | nindent 4 }}
   ports:
     - protocol: TCP
       port: 27017

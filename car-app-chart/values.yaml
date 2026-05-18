@@ -23,4 +23,4 @@ service:
   nodePort: 30001
 
 secrets:
-  mongoUri: "mongodb://mongo-svc:27017/car_db"
+  mongoUri: "mongodb://my-car-app-car-app-chart-mongo-svc:27017/car_db"
