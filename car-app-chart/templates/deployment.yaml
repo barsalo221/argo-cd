@@ -21,7 +21,7 @@ spec:
             - containerPort: {{ .Values.app.image.containerPort }}
           env:
             - name: MONGO_URI
-              valueFrom:
-                secretKeyRef:
-                  name: car-app-secret
-                  key: MONGO_URI
+            valueFrom:
+              secretKeyRef:
+                name: car-app-secret
+                key: MONGO_URI

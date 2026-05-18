@@ -23,6 +23,3 @@ service:
   port: 80
   targetPort: 5000
   nodePort: 30001
-
-secrets:
-  mongouri: "mongodb://my-car-app-car-app-chart-mongo-svc:27017/car_db"
