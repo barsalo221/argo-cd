@@ -6,7 +6,6 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
     traefik.ingress.kubernetes.io/service.sticky.cookie.name: "sticky-cookie"
-
 spec:
   selector:
     {{- include "car-app.selectorLabels" . | nindent 4 }}
@@ -14,4 +13,4 @@ spec:
     - protocol: TCP
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
-      # nodePort: {{ .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
