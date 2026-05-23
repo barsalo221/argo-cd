@@ -24,6 +24,23 @@
             <button class="btn">Add New Car</button>
         </a>
     </div>
-    
+    <div class="car-card">
+        <h1>car's parameter!</h1>
+        <ul>
+            {% for car in cars %}
+               <ul class="car-details">
+            <li><span class="label">brand:</span> {{ car.brand }}</li>
+            <li><span class="label">model:</span> {{ car.model }}</li>
+            <li><span class="label">year:</span> {{ car.year }}</li>
+            <li><span class="label">color:</span> {{ car.color }}</li>
+            {% else %}
+                <li>No Cars Yet...</li>
+            {% endfor %}
+        </ul>
+        <a href="/add-car">
+            <button class="btn">Add New Car</button>
+        </a>
+    </div>
+
 </body>
 </html>
