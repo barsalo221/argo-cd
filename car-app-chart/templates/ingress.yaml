@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "car-app.fullname" . }}-ingress
+  labels: {{- include "car-app.labels" . | nindent 4 }}
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: car-app.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "car-app.fullname" . }}-svc
+            port:
+              number: 80
