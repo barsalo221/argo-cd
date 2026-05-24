@@ -24,15 +24,14 @@ spec:
             - name: MONGO_URI
               value: "mongodb://{{ include "car-app.fullname" . }}-mongo-svc:27017/car_db"
       readinessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.app.image.containerPort }}
-            initialDelaySeconds: 5
-            periodSeconds: 5
-          livenessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.app.image.containerPort }}
-            initialDelaySeconds: 10
-            periodSeconds: 10
-      
+        httpGet:
+          path: /
+          port: {{ .Values.app.image.containerPort }}
+        initialDelaySeconds: 5
+        periodSeconds: 5
+      livenessProbe:
+        httpGet:
+          path: /
+          port: {{ .Values.app.image.containerPort }}
+        initialDelaySeconds: 10
+        periodSeconds: 10      
