@@ -67,3 +67,15 @@ input {
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+.cars-container {
+    display: flex;
+    flex-direction: row;  
+    flex-wrap: wrap;            
+    gap: 20px;                  
+    justify-content: center;  
+    padding: 20px;
+}
+.actions-container {
+    text-align: center;
+    margin-top: 30px;
+}
