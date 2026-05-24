@@ -14,6 +14,18 @@ spec:
       labels:
         {{- include "car-app.selectorLabels" . | nindent 8 }}
     spec:
+      readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.app.image.containerPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.app.image.containerPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
       containers:
         - name: car-container
           image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
