@@ -4,7 +4,7 @@ metadata:
   name: {{ include "car-app.fullname" . }}  
   labels: {{- include "car-app.labels" . | nindent 4 }}
 spec:
-  revisionHistoryLimit: 2
+  revisionHistoryLimit: {{ .Values.app.revisionHistoryLimit }}
   replicas: {{ .Values.app.replicaCount }}
   selector:
     matchLabels:

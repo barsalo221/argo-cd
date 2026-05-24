@@ -1,5 +1,6 @@
 app:
   replicaCount: 3
+  revisionHistoryLimit: 2
   image:
     repository: barsalo221/car-app
     tag: latest
