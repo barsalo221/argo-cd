@@ -38,12 +38,9 @@ spec:
           port: {{ .Values.app.image.containerPort }}
         initialDelaySeconds: 5
         periodSeconds: 5
-        timeoutSeconds: 2
-        failureThreshold: 2
       livenessProbe:
         httpGet:
           path: /
           port: {{ .Values.app.image.containerPort }}
         initialDelaySeconds: 10
-        periodSeconds: 10
-        timeoutSeconds: 5
+        periodSeconds: 10      
