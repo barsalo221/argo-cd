@@ -20,6 +20,10 @@ spec:
           imagePullPolicy: {{ .Values.app.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.app.image.containerPort }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]
           env:
             - name: MONGO_URI
               value: "mongodb://{{ include "car-app.fullname" . }}-mongo-svc:27017/car_db"
