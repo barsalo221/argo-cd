@@ -4,6 +4,9 @@ metadata:
   name: {{ include "car-app.fullname" . }}-ingress
   labels: {{- include "car-app.labels" . | nindent 4 }}
   namespace: default
+  annotations:
+    traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+    traefik.ingress.kubernetes.io/service.sticky.cookie.name: "sticky-cookie"
 spec:
   entryPoints:
     - web
