@@ -9,7 +9,6 @@ metadata:
   selector:
     {{- include "car-app.selectorLabels" . | nindent 4 }}
   ports:
-    - name: http
       protocol: TCP
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
