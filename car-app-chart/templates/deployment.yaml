@@ -14,6 +14,15 @@ spec:
       labels:
         {{- include "car-app.selectorLabels" . | nindent 8 }}
     spec:
+      containers:
+        - name: car-container
+          image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
+          imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.app.image.containerPort }}
+          env:
+            - name: MONGO_URI
+              value: "mongodb://{{ include "car-app.fullname" . }}-mongo-svc:27017/car_db"
       readinessProbe:
             httpGet:
               path: /
@@ -26,12 +35,4 @@ spec:
               port: {{ .Values.app.image.containerPort }}
             initialDelaySeconds: 10
             periodSeconds: 10
-      containers:
-        - name: car-container
-          image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
-          imagePullPolicy: {{ .Values.app.image.pullPolicy }}
-          ports:
-            - containerPort: {{ .Values.app.image.containerPort }}
-          env:
-            - name: MONGO_URI
-              value: "mongodb://{{ include "car-app.fullname" . }}-mongo-svc:27017/car_db"
+      
