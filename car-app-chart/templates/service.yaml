@@ -6,6 +6,8 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
     traefik.ingress.kubernetes.io/service.sticky.cookie.name: "sticky-cookie"
+    traefik.ingress.kubernetes.io/service.sticky.cookie.maxage: "300"
+    traefik.ingress.kubernetes.io/service.retries: "3"
 spec:
   selector:
     {{- include "car-app.selectorLabels" . | nindent 4 }}
