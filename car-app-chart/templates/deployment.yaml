@@ -6,11 +6,6 @@ metadata:
 spec:
   revisionHistoryLimit: {{ .Values.app.revisionHistoryLimit }}
   replicas: {{ .Values.app.replicaCount }}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
   selector:
     matchLabels:
       {{- include "car-app.selectorLabels" . | nindent 6 }}
@@ -25,22 +20,6 @@ spec:
           imagePullPolicy: {{ .Values.app.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.app.image.containerPort }}
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/bin/sh", "-c", "sleep 15"]
           env:
             - name: MONGO_URI
               value: "mongodb://{{ include "car-app.fullname" . }}-mongo-svc:27017/car_db"
-      readinessProbe:
-        httpGet:
-          path: /
-          port: {{ .Values.app.image.containerPort }}
-        initialDelaySeconds: 5
-        periodSeconds: 5
-      livenessProbe:
-        httpGet:
-          path: /
-          port: {{ .Values.app.image.containerPort }}
-        initialDelaySeconds: 10
-        periodSeconds: 10      
