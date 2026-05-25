@@ -6,6 +6,8 @@ metadata:
   namespace: default
   annotations:
     kubernetes.io/ingress.class: traefik
+    # ✅ Sticky Session דרך Traefik (לא דרך Service)
+    traefik.ingress.kubernetes.io/router.middlewares: default-sticky@kubernetescrd
 spec:
   ingressClassName: traefik
   rules:

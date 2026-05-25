@@ -1,11 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "car-app.fullname" . }}  
+  name: {{ include "car-app.fullname" . }}
   labels: {{- include "car-app.labels" . | nindent 4 }}
 spec:
   revisionHistoryLimit: {{ .Values.app.revisionHistoryLimit }}
   replicas: {{ .Values.app.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0   # לעולם לא להוריד פוד לפני שהחדש מוכן
+      maxSurge: 1
   selector:
     matchLabels:
       {{- include "car-app.selectorLabels" . | nindent 6 }}
@@ -14,24 +19,33 @@ spec:
       labels:
         {{- include "car-app.selectorLabels" . | nindent 8 }}
     spec:
-      readinessProbe:
-        httpGet:
-          path: /
-          port: {{ .Values.app.image.containerPort }}
-        initialDelaySeconds: 5
-        periodSeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /
-            port: {{ .Values.app.image.containerPort }}
-          initialDelaySeconds: 10
-          periodSeconds: 10
+      terminationGracePeriodSeconds: 30
       containers:
         - name: car-container
           image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
           imagePullPolicy: {{ .Values.app.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.app.image.containerPort }}
+          # ✅ Probes חייבים להיות תחת container, לא תחת spec
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.app.image.containerPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.app.image.containerPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                # נותן ל-Traefik זמן להוציא את הפוד מהרוטציה לפני סגירה
+                command: ["/bin/sh", "-c", "sleep 10"]
           env:
             - name: MONGO_URI
               value: "mongodb://{{ include "car-app.fullname" . }}-mongo-svc:27017/car_db"
