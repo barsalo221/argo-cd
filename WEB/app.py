@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
 from pymongo import MongoClient
+from pymongo.errors import PyMongoError
+
 
 app = Flask(__name__)
 
@@ -14,8 +16,12 @@ cars_collection = db["cars"]
 
 @app.route('/')
 def home():
-    all_cars = list(cars_collection.find())
-    return render_template('index.html', cars=all_cars)
+    try:
+        all_cars = list(cars_collection.find())
+        return render_template('index.html', cars=all_cars)
+    except PyMongoError as e:
+        app.logger.error(f"MongoDB error: {e}")
+        return render_template('index.html', cars=[], error="Database temporarily unavailable"), 503
 
 @app.route('/add-car', methods=['GET', 'POST'])
 def add_car():
@@ -35,6 +41,10 @@ def add_car():
         return redirect(url_for('home'))
     
     return render_template('addcar.html')
+
+@app.route('/health')
+def health():
+    return {'status': 'ok'}, 200
 
 
 if __name__ == '__main__':

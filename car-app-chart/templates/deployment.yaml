@@ -29,7 +29,7 @@ spec:
           # ✅ Probes חייבים להיות תחת container, לא תחת spec
           readinessProbe:
             httpGet:
-              path: /
+              path: /health
               port: {{ .Values.app.image.containerPort }}
             initialDelaySeconds: 10
             periodSeconds: 5
@@ -37,7 +37,7 @@ spec:
             timeoutSeconds: 5
           livenessProbe:
             httpGet:
-              path: /
+              path: /health
               port: {{ .Values.app.image.containerPort }}
             initialDelaySeconds: 20
             periodSeconds: 10
