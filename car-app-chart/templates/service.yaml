@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "car-app.fullname" . }}-svc
   labels: {{- include "car-app.labels" . | nindent 4 }}
-spec:
+  spec:
   selector:
     {{- include "car-app.selectorLabels" . | nindent 4 }}
   ports:
