@@ -3,7 +3,7 @@ app:
   revisionHistoryLimit: 2
   image:
     repository: barsalo221/car-app
-    tag: latest
+    tag: "v1.0.551"
     pullPolicy: Always
     containerPort: 5000
 
