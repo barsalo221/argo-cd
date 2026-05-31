@@ -37,6 +37,7 @@ spec:
       containers:
         - name: mongodb
           image: {{ .Values.mongodb.image }}
+          args: ["--bind_ip_all"]
           ports:
             - containerPort: {{ .Values.mongodb.port }}
       volumes:
