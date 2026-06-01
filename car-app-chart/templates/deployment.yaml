@@ -26,7 +26,7 @@ spec:
         vault.hashicorp.com/agent-inject-secret-mongo-credentials: "database/creds/cars-app-role"
         vault.hashicorp.com/agent-inject-template-mongo-credentials: |
           {{ `{{ with secret "database/creds/cars-app-role" }}` }}
-          mongodb://{{ `{{ .Data.username }}` }}:{{ `{{ .Data.password }}` }}@{{ include "car-app.fullname" . }}-chart-mongo-svc.default.svc.cluster.local:27017/my_cars?authSource=admin&directConnection=true&tls=false
+          mongodb://{{ `{{ .Data.username }}` }}:{{ `{{ .Data.password }}` }}@{{ include "car-app.fullname" . }}-mongo-svc.default.svc.cluster.local:27017/my_cars?authSource=admin&directConnection=true&tls=false
           {{ `{{ end }}` }}
     spec:
       terminationGracePeriodSeconds: 30
