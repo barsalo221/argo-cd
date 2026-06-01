@@ -22,10 +22,12 @@ spec:
   selector:
     matchLabels: 
     {{- include "car-app.selectorLabels" . | nindent 6 }}
+    app.kubernetes.io/component: mongodb
   template:
     metadata:
       labels: 
       {{- include "car-app.selectorLabels" . | nindent 8 }}
+      app.kubernetes.io/component: mongodb
     spec:
       initContainers:
         - name: fix-permissions

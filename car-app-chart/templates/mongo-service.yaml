@@ -6,6 +6,7 @@ metadata:
 spec:
   selector: 
     {{- include "car-app.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: mongodb
   ports:
     - protocol: TCP
       port: 27017

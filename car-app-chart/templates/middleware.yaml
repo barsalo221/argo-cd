@@ -9,4 +9,4 @@ spec:
             name: car_sticky
             httpOnly: true
             secure: false
-            sameSite: lax
+            sameSite: lax # asd

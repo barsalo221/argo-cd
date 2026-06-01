@@ -14,10 +14,12 @@ spec:
   selector:
     matchLabels:
       {{- include "car-app.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: car-backend
   template:
     metadata:
       labels:
         {{- include "car-app.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: car-backend
     spec:
       terminationGracePeriodSeconds: 30
       containers:
@@ -26,7 +28,6 @@ spec:
           imagePullPolicy: {{ .Values.app.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.app.image.containerPort }}
-          # ✅ Probes חייבים להיות תחת container, לא תחת spec
           readinessProbe:
             httpGet:
               path: /health
