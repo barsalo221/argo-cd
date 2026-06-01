@@ -25,7 +25,7 @@ def get_mongo_client():
             mongo_uri = f.read().strip()
             # בדיקת בטיחות קטנה שזה לא ריק
             if not mongo_uri or not mongo_uri.startswith("mongodb://"):
-                 raise ValueError("CRITICAL: Invalid or empty Content in Vault secret file.")
+                raise ValueError("CRITICAL: Invalid or empty Content in Vault secret file.")
     except Exception as e:
         app.logger.critical(f"CRITICAL: Failed to read or parse Vault secret file: {e}")
         raise e
