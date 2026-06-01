@@ -20,6 +20,14 @@ spec:
       labels:
         {{- include "car-app.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: car-backend
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "cars-app-role"
+        vault.hashicorp.com/agent-inject-secret-mongo-credentials: "database/creds/cars-app-role"
+        vault.hashicorp.com/agent-inject-template-mongo-credentials: |
+          {{ `{{ with secret "database/creds/cars-app-role" }}` }}
+          mongodb://{{ `{{ .Data.username }}` }}:{{ `{{ .Data.password }}` }}@{{ include "car-app.fullname" . }}-chart-mongo-svc.default.svc.cluster.local:27017/my_cars?authSource=admin&directConnection=true&tls=false
+          {{ `{{ end }}` }}
     spec:
       terminationGracePeriodSeconds: 30
       containers:
@@ -50,5 +58,5 @@ spec:
                 # נותן ל-Traefik זמן להוציא את הפוד מהרוטציה לפני סגירה
                 command: ["/bin/sh", "-c", "sleep 10"]
           env:
-            - name: MONGO_URI
-              value: "mongodb://{{ include "car-app.fullname" . }}-mongo-svc:27017/car_db"
+            - name: MONGO_URI_FILE
+              value: "/vault/secrets/mongo-credentials"

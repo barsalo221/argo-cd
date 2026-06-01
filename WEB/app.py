@@ -3,15 +3,15 @@ import os
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
 
-
 app = Flask(__name__)
 
-MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
+mongo_uri_file = os.environ.get('MONGO_URI_FILE')
 
-client = MongoClient(MONGO_URI)
-db = client["my_cars"] 
-cars_collection = db["cars"] 
-
+if mongo_uri_file and os.path.exists(mongo_uri_file):
+    with open(mongo_uri_file, 'r') as f:
+        mongo_uri = f.read().strip()
+else:
+    mongo_uri = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/my_cars')
 
 
 @app.route('/')
