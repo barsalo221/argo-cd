@@ -13,38 +13,29 @@ def get_mongo_client():
     
     global _mongo_client
     
-    # 1. ניסיון קריאה קשיח מהקובץ של Vault - בלי Fallback ל-localhost!
     if not os.path.exists(MONGO_URI_FILE):
         error_msg = f"CRITICAL: Vault secret file NOT FOUND at {MONGO_URI_FILE}. Application cannot start."
         app.logger.critical(error_msg)
-        # בהיעדר קונפיגורציה, אנחנו מרימים שגיאה שתגרום לפוד לעשות ריסטארט (זה תקין)
         raise FileNotFoundError(error_msg)
 
     try:
         with open(MONGO_URI_FILE, 'r') as f:
             mongo_uri = f.read().strip()
-            # בדיקת בטיחות קטנה שזה לא ריק
             if not mongo_uri or not mongo_uri.startswith("mongodb://"):
                 raise ValueError("CRITICAL: Invalid or empty Content in Vault secret file.")
     except Exception as e:
         app.logger.critical(f"CRITICAL: Failed to read or parse Vault secret file: {e}")
         raise e
 
-    # 2. אם אין קליינט בכלל, ניצור אחד חדש
     if _mongo_client is None:
         app.logger.info("Creating a new MongoDB client instance...")
-        # נוריד את הטיימאוטMSMSms קצת ל-2 שניות כדי לזהות בעיות מהר יותר
         _mongo_client = MongoClient(mongo_uri, serverSelectionTimeoutMS=2000)
         return _mongo_client
 
-    # 3. אם יש קליינט, נבצע בדיקת דופק (Ping) כדי לוודא שהסיסמה לא פגה
     try:
         _mongo_client.admin.command('ping')
         return _mongo_client
     except (OperationFailure, PyMongoError) as e:
-        # אם קיבלנו שגיאה, זה אומר ש-Vault כנראה ביצע רוטציה לסיסמה.
-        # שים לב: אנחנו לא עושים close() כאן, זה מיותר ב-Pymongo מודרני,
-        # פשוט דורסים את ה-pool עם קליינט חדש.
         app.logger.warning(f"MongoDB auth failed or connection issue ({e}). Re-generating client from fresh Vault secret...")
         _mongo_client = MongoClient(mongo_uri, serverSelectionTimeoutMS=2000)
         return _mongo_client
@@ -91,7 +82,6 @@ def add_car():
 
 @app.route('/health')
 def health():
-    # ה-Health Check הוא המקום המושלם לוודא שגם החיבור ל-DB בריא ורענן
     try:
         client = get_mongo_client()
         client.admin.command('ping')
