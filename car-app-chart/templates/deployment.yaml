@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "car-app.fullname" . }}
-  labels: {{- include "car-app.labels" . | nindent 4 }}
+    name: {{ include "car-app.fullname" . }}
+    labels: {{- include "car-app.labels" . | nindent 4 }}
 spec:
   revisionHistoryLimit: {{ .Values.app.revisionHistoryLimit }}
   replicas: {{ .Values.app.replicaCount }}
