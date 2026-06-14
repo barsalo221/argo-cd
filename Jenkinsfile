@@ -38,7 +38,7 @@ spec:
         stage('Build & Push with Kaniko') {
             steps {
                 withVault([configuration: [timeout: 60, vaultCredentialId: 'vault-k8s-auth', vaultUrl: 'http://vault.vault.svc.cluster.local:8200'], 
-                           vaultSecrets: [[path: 'secret/data/jenkins/dockerhub', secretValues: [[envVar: 'DOCKER_PASS', vaultKey: 'password']]]]]) {
+                           vaultSecrets: [[path: 'secret/jenkins/dockerhub', secretValues: [[envVar: 'DOCKER_PASS', vaultKey: 'password']]]]]) {
                     
                     script {
                         sh '''
@@ -58,7 +58,7 @@ spec:
             steps {
                 // עודכן כאן ה-vaultUrl ל-vault.vault.svc כדי להתאים לשלב הקודם שהצליח
                 withVault([configuration: [timeout: 60, vaultCredentialId: 'vault-k8s-auth', vaultUrl: 'http://vault.vault.svc.cluster.local:8200'], 
-                           vaultSecrets: [[path: 'secret/data/jenkins/github', secretValues: [[envVar: 'GIT_TOKEN', vaultKey: 'token']]]]]) {
+                           vaultSecrets: [[path: 'secret/jenkins/github', secretValues: [[envVar: 'GIT_TOKEN', vaultKey: 'token']]]]]) {
                     
                     sh """
                     git config user.email "jenkins-bot@local"
