@@ -17,6 +17,10 @@ spec:
     command:
     - cat
     tty: true
+    # הוספת הרשאות Root לקניקו כדי למנוע Permission denied בתוך התיקייה שלו
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
 """
         }
     }
@@ -41,13 +45,14 @@ spec:
                            vaultSecrets: [[path: 'secret/jenkins/dockerhub', secretValues: [[envVar: 'DOCKER_PASS', vaultKey: 'password']]]]]) {
                     
                     script {
-                        sh '''
-                        mkdir -p /kaniko/.docker
-                        echo "{\\"auths\\":{\\"https://index.docker.io/v1/\\":{\\"auth\\":\\"$(echo -n $DOCKER_USER:$DOCKER_PASS | base64)\\"}}}" > /kaniko/.docker/config.json
-                        '''
-                        
+                        // הכל נעטף תחת קניקו, והמשתנים של ג'נקינס מוזרקים פנימה בעזרת מרכאות כפולות במקום גרש בודד
                         container('kaniko') {
-                            sh "/kaniko/executor --context=`pwd` --dockerfile=Dockerfile --destination=${IMAGE_NAME}:${IMAGE_TAG}"
+                            sh """
+                            mkdir -p /kaniko/.docker
+                            echo "{\\"auths\\":{\\"https://index.docker.io/v1/\\":{\\"auth\\":\\"\$(echo -n ${DOCKER_USER}:${DOCKER_PASS} | base64)\\"}}}" > /kaniko/.docker/config.json
+                            
+                            /kaniko/executor --context=${WORKSPACE} --dockerfile=${WORKSPACE}/Dockerfile --destination=${IMAGE_NAME}:${IMAGE_TAG}
+                            """
                         }
                     }
                 }
@@ -56,7 +61,6 @@ spec:
 
         stage('Update & Push to Git') {
             steps {
-                // עודכן כאן ה-vaultUrl ל-vault.vault.svc כדי להתאים לשלב הקודם שהצליח
                 withVault([configuration: [timeout: 60, vaultCredentialId: 'vault-k8s-auth', vaultUrl: 'http://vault.vault.svc.cluster.local:8200'], 
                            vaultSecrets: [[path: 'secret/jenkins/github', secretValues: [[envVar: 'GIT_TOKEN', vaultKey: 'token']]]]]) {
                     
