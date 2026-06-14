@@ -34,17 +34,16 @@ spec:
 
         stage('Build & Push with Kaniko') {
             steps {
-                // משיכת הרשאות מ-Vault במקום מ-Jenkins Credentials
                 withVault([configuration: [timeout: 60, vaultCredentialId: 'vault-k8s-auth', vaultUrl: 'http://vault.default.svc.cluster.local:8200'], 
                            vaultSecrets: [[path: 'secret/data/jenkins/dockerhub', secretValues: [[envVar: 'DOCKER_PASS', vaultKey: 'password']]]]]) {
                     
                     script {
-                        // כתיבת קובץ הקונפיגורציה של Docker עבור Kaniko
-                        sh """
+                        // שימוש ב-''' מונע מג'נקינס לגעת בסימני ה-$, והכל מבוצע ישירות ב-Shell
+                        sh '''
                         mkdir -p /kaniko/.docker
-                        echo "{\\"auths\\":{\\"https://index.docker.io/v1/\\":{\\"auth\\":\\"$(echo -n ${DOCKER_USER}:${DOCKER_PASS} | base64)\\"}}}" > /kaniko/.docker/config.json
-                        """
-                        // בנייה ודחיפה באמצעות Kaniko
+                        echo "{\\"auths\\":{\\"https://index.docker.io/v1/\\":{\\"auth\\":\\"$(echo -n $DOCKER_USER:$DOCKER_PASS | base64)\\"}}}" > /kaniko/.docker/config.json
+                        '''
+                        
                         container('kaniko') {
                             sh "/kaniko/executor --context=`pwd` --dockerfile=Dockerfile --destination=${IMAGE_NAME}:${IMAGE_TAG}"
                         }
@@ -55,7 +54,6 @@ spec:
 
         stage('Update & Push to Git') {
             steps {
-                // כאן נשתמש ב-Vault כדי למשוך את ה-GitHub Token
                 withVault([configuration: [timeout: 60, vaultCredentialId: 'vault-k8s-auth', vaultUrl: 'http://vault.default.svc.cluster.local:8200'], 
                            vaultSecrets: [[path: 'secret/data/jenkins/github', secretValues: [[envVar: 'GIT_TOKEN', vaultKey: 'token']]]]]) {
                     
