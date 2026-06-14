@@ -1,11 +1,14 @@
 pipeline {
     agent {
         kubernetes {
+            // הגדרת ה-Namespace שבו ירוץ הפוד הדינמי
+            namespace 'devops-tools'
             yaml """
 kind: Pod
 metadata:
   name: car-app-builder
 spec:
+  serviceAccountName: jenkins
   containers:
   - name: jnlp
     image: jenkins/inbound-agent:latest
@@ -38,7 +41,6 @@ spec:
                            vaultSecrets: [[path: 'secret/data/jenkins/dockerhub', secretValues: [[envVar: 'DOCKER_PASS', vaultKey: 'password']]]]]) {
                     
                     script {
-                        // שימוש ב-''' מונע מג'נקינס לגעת בסימני ה-$, והכל מבוצע ישירות ב-Shell
                         sh '''
                         mkdir -p /kaniko/.docker
                         echo "{\\"auths\\":{\\"https://index.docker.io/v1/\\":{\\"auth\\":\\"$(echo -n $DOCKER_USER:$DOCKER_PASS | base64)\\"}}}" > /kaniko/.docker/config.json
@@ -54,7 +56,8 @@ spec:
 
         stage('Update & Push to Git') {
             steps {
-                withVault([configuration: [timeout: 60, vaultCredentialId: 'vault-k8s-auth', vaultUrl: 'http://vault.default.svc.cluster.local:8200'], 
+                // עודכן כאן ה-vaultUrl ל-vault.vault.svc כדי להתאים לשלב הקודם שהצליח
+                withVault([configuration: [timeout: 60, vaultCredentialId: 'vault-k8s-auth', vaultUrl: 'http://vault.vault.svc.cluster.local:8200'], 
                            vaultSecrets: [[path: 'secret/data/jenkins/github', secretValues: [[envVar: 'GIT_TOKEN', vaultKey: 'token']]]]]) {
                     
                     sh """
