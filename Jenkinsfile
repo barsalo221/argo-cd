@@ -34,7 +34,7 @@ spec:
 
         stage('Build & Push with Kaniko') {
             steps {
-                withVault([configuration: [timeout: 60, vaultCredentialId: 'vault-k8s-auth', vaultUrl: 'http://vault.default.svc.cluster.local:8200'], 
+                withVault([configuration: [timeout: 60, vaultCredentialId: 'vault-k8s-auth', vaultUrl: 'http://vault.vault.svc.cluster.local:8200'], 
                            vaultSecrets: [[path: 'secret/data/jenkins/dockerhub', secretValues: [[envVar: 'DOCKER_PASS', vaultKey: 'password']]]]]) {
                     
                     script {
