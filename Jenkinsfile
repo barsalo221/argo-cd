@@ -8,7 +8,7 @@ kind: Pod
 metadata:
   name: car-app-builder
 spec:
-  serviceAccountName: jenkins
+  serviceAccountName: jenkins-admin
   containers:
   - name: jnlp
     image: jenkins/inbound-agent:latest
